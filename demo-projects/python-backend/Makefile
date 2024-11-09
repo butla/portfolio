@@ -52,16 +52,22 @@ code_fixes:
 # ===========
 
 db_migration:
-	@echo "=== Running DB migrations... ==="
+	@echo ========================
+	@echo Running DB migrations...
+	@echo ========================
 	poetry run alembic upgrade head
 
 # Usage make make_migration MESSAGE="<a message>"
 make_migration:
-	@echo "=== Autogenerating DB migrations... ==="
+	@echo ===============================
+	@echo Autogenerating DB migrations...
+	@echo ===============================
 	poetry run alembic revision --autogenerate -m "$(MESSAGE)"
 
 _start_compose: _export_requirements
-	@echo "=== Starting Docker Compose... ==="
+	@echo ==========================
+	@echo Starting Docker Compose...
+	@echo ==========================
 	docker compose up --build -d
 
 _export_requirements:
