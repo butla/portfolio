@@ -1,17 +1,16 @@
 import datetime
 
-from pydantic import BaseModel  # pylint: disable=no-name-in-module
+import pydantic
 
 
-class NoteCreationPayload(BaseModel):
+class NoteCreationPayload(pydantic.BaseModel):
     contents: str
 
 
-class NoteResponsePayload(BaseModel):
+class NoteResponsePayload(pydantic.BaseModel):
+    # With this, FastApi will handle returning ORM Note objects from endpoint functions.
+    model_config = pydantic.ConfigDict(from_attributes=True)
+
     id: int
     creation_date: datetime.datetime
     contents: str
-
-    # With this, FastApi will handle returning ORM Note objects from endpoint functions.
-    class Config:
-        orm_mode = True

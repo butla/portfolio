@@ -7,12 +7,12 @@ from sample_backend.notes import NotesRepository
 
 
 @pytest.fixture
-def notes_repo():
+def notes_repo() -> NotesRepository:
     return NotesRepository(make_db_session_creator())
 
 
 @pytest.mark.asyncio
-async def test_create_a_note(notes_repo: NotesRepository):
+async def test_create_a_note(notes_repo: NotesRepository) -> None:
     note_payload = api_schemas.NoteCreationPayload(contents="I'm a note, wee!")
 
     id_ = await notes_repo.create(note_payload)
@@ -20,7 +20,7 @@ async def test_create_a_note(notes_repo: NotesRepository):
     async with make_db_session_creator()() as session:
         query = select(Note).where(Note.id == id_)
         result = await session.execute(query)
-        saved_object = result.scalar()
+        saved_object = result.scalar_one()
 
     assert saved_object.contents == note_payload.contents
     assert saved_object.id == id_

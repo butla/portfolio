@@ -4,29 +4,31 @@
 # So we're sure what shell we're using.
 SHELL:=/bin/bash
 
-SOURCES:=sample_backend tests
+SRC_DIRECTORIES:=sample_backend tests
 
 # MAIN COMMANDS
 # ==============
 
-setup_development:
-	poetry install
+setup:
+	poetry install --no-root
 
 run: _start_compose db_migration
 
-check: static_checks test
+run_reload:
+	fd --exclude .git --no-ignore '\.py$$' | entr -c make run
+
+check: static_checks run test
 
 format:
-	@echo "=== Formatting code... ==="
-	@poetry run black $(SOURCES)
-	@echo "=== Sorting imports... ==="
-	@poetry run isort $(SOURCES)
+	@echo ==================
+	@echo Formatting code...
+	@echo ==================
+	poetry run ruff format $(SRC_DIRECTORIES)
+	# Import sorting like isort.
+	poetry run ruff check $(SRC_DIRECTORIES) --select I --fix
 
 # UTILITY COMMANDS
 # ================
-
-build_docker: export_requirements
-	docker compose build
 
 destroy:
 	docker compose down -v
@@ -43,8 +45,12 @@ db_shell:
 docker_app_shell:
 	docker exec -it sample_backend_app-api-1 sh
 
+code_fixes:
+	poetry run ruff check $(SRC_DIRECTORIES) --fix
+
 # SUBCOMMANDS
 # ===========
+
 db_migration:
 	@echo "=== Running DB migrations... ==="
 	poetry run alembic upgrade head
@@ -54,35 +60,39 @@ make_migration:
 	@echo "=== Autogenerating DB migrations... ==="
 	poetry run alembic revision --autogenerate -m "$(MESSAGE)"
 
+_start_compose: _export_requirements
+	@echo "=== Starting Docker Compose... ==="
+	docker compose up --build -d
 
-export_requirements:
+_export_requirements:
 	poetry export --output=requirements.txt
 
-_start_compose:
-	@echo "=== Starting Docker Compose... ==="
-	docker compose up -d
-
 test:
-	@echo === Running tests... ===
-	@poetry run pytest tests
+	@echo ================
+	@echo Running tests...
+	@echo ================
+	poetry run pytest -v tests
 
-test_reloading:
+test_reload:
 	fd --exclude .git --no-ignore '\.py$$' | entr -c make test
 
-static_checks: _check_isort _check_format _check_linter _check_types
-
-_check_isort:
-	@echo === Checking import sorting... ===
-	@poetry run isort -c $(SOURCES)
-
-_check_format:
-	@echo === Checking code formatting... ===
-	@poetry run black --check $(SOURCES)
-
-_check_linter:
-	@echo === Linting... ===
-	@poetry run pylint $(SOURCES)
+static_checks: _check_types _check_format _check_linter _check_types
 
 _check_types:
-	@echo === Checking types... ===
-	@poetry run mypy $(SOURCES)
+	@echo =================
+	@echo Checking types...
+	@echo =================
+	poetry run mypy $(SRC_DIRECTORIES)
+
+_check_linter:
+	@echo ===================
+	@echo Checking linters...
+	@echo ===================
+	poetry run ruff check $(SRC_DIRECTORIES)
+
+_check_format:
+	@echo ======================
+	@echo Checking formatting...
+	@echo ======================
+	poetry run ruff format --check $(SRC_DIRECTORIES)
+

@@ -1,13 +1,22 @@
 Sample back-end app
 ===================
 
-A sample back-end app used to illustrate testing and development techniques.
+A sample back-end app used to illustrate testing and development techniques. TODO
+
+## Setup
+
+Install these (TODO links):
+- poetry
+- Docker
+- for make commands that run tests on file changes and reload the app: fd and entr
 
 ## Development operations
 
 The commands are in the Makefile. Please review it.
 
 ## Demonstrated techniques
+
+TODO - fix the make command names
 
 - integrated and external (functional / end-to-end) tests with Docker Compose
 - reloading app container on code changes (`make run_reloading`)
@@ -21,8 +30,6 @@ The commands are in the Makefile. Please review it.
 
 ## TODOs
 
-- make `mypy` pass
-- switch out pylint, black, and isort for ruff
 - pytest: stop trying to interpret TestsConfig as a test class
   - https://docs.pytest.org/en/7.1.x/example/pythoncollection.html
 - show coverage measurements from docker in external tests

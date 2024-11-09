@@ -1,17 +1,16 @@
 """
 Internal services of the application.
+
 The IoC container of the application.
 """
-
-from typing import Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from .db import make_db_session_creator
 from .notes import NotesRepository
 
-_db_session_creator: Optional[async_sessionmaker[AsyncSession]]
-_notes_repo: Optional[NotesRepository]
+_db_session_creator: async_sessionmaker[AsyncSession] | None
+_notes_repo: NotesRepository | None
 
 
 def get_db_session_creator() -> async_sessionmaker[AsyncSession]:
@@ -26,8 +25,8 @@ def get_notes_repo() -> NotesRepository:
     return _notes_repo
 
 
-def init():
-    global _db_session_creator  # pylint: disable=global-statement
-    global _notes_repo  # pylint: disable=global-statement
+def init() -> None:
+    global _db_session_creator  # noqa: PLW0603
+    global _notes_repo  # noqa: PLW0603
     _db_session_creator = make_db_session_creator()
     _notes_repo = NotesRepository(_db_session_creator)

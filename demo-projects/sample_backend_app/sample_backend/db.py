@@ -18,15 +18,17 @@ def make_db_session_creator() -> async_sessionmaker[AsyncSession]:
 
 
 class Base(DeclarativeBase):
-    pass
+    """Base class for SQL Alchemy tables."""
 
 
 class Note(Base):
+    """Notes table."""
+
     __tablename__ = "notes"
 
     # TODO make this a GUID
     id: Mapped[int] = mapped_column(primary_key=True)
     # TODO should be timezone-aware
-    creation_date: Mapped[datetime.datetime] = mapped_column(server_default=func.now())  # pylint: disable=not-callable
+    creation_date: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     contents: Mapped[str]
     is_deleted: Mapped[bool] = mapped_column(server_default=expression.false())

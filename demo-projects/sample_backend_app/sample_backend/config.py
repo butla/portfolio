@@ -1,7 +1,9 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 class AppConfig(BaseSettings):
+    """Settings for the application. Taken from environment variables."""
+
     postgres_host: str = "localhost"
     postgres_password: str = "postgres"
     postgres_database: str = "postgres"
