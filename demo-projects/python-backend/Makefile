@@ -43,8 +43,9 @@ db_shell:
 	PGPASSWORD=postgres poetry run pgcli -h localhost -p 5432 -U postgres -d postgres
 
 docker_app_shell:
-	docker exec -it sample_backend_app-api-1 sh
+	docker compose exec api sh
 
+# Fix everything that Ruff proposes to fix.
 code_fixes:
 	poetry run ruff check $(SRC_DIRECTORIES) --fix
 
