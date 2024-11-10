@@ -1,1 +1,4 @@
 **/__pycache__
+**/conftest.py
+**/tests
+**/*_test.py

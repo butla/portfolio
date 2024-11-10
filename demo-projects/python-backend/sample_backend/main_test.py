@@ -7,7 +7,7 @@ import httpx
 import pytest
 import tenacity
 
-from tests.config import AppTestsConfig
+from sample_backend.tests.config import AppTestsConfig
 
 
 # Scope is session, so that this fixture runs only once during the test suite.
@@ -21,12 +21,20 @@ def app_url() -> str:
 
 @tenacity.retry(stop=tenacity.stop_after_delay(10), wait=tenacity.wait_fixed(0.2), reraise=True)
 def _wait_for_http_url(url: str) -> None:
+    """
+    Waits for the app running in Docker to become responsive.
+
+    If the tests run immediately after the containers have started, they will need to wait a moment for the
+    app to become responsive.
+    """
     result = httpx.get(url)
     if result.status_code != http.HTTPStatus.OK:
         raise ValueError("App returned the wrong status code")
 
 
+@pytest.mark.external
 def test_store_and_retrieve_note(app_url: str) -> None:
+    """Check that the app runs correctly in the Docker container."""
     note_contents = f"first note {uuid.uuid4()}"
     create_result = httpx.post(
         f"{app_url}/notes/",

@@ -4,7 +4,7 @@
 # So we're sure what shell we're using.
 SHELL:=/bin/bash
 
-SRC_DIRECTORIES:=sample_backend tests
+SRC_DIRECTORIES:=sample_backend alembic_migrations
 
 # MAIN COMMANDS
 # ==============
@@ -28,7 +28,7 @@ test:
 	@echo ================
 	@echo Running tests...
 	@echo ================
-	poetry run pytest -v tests
+	poetry run pytest -v
 
 test_reload:
 	fd --exclude .git --no-ignore '\.py$$' | entr -c make test

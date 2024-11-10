@@ -33,10 +33,13 @@ The commands are in the Makefile. Please review it.
 TODO: split into categories, like architecture, SQL, testing, code formatting, local workflow
 
 - application architecture inspired by clean code, TODO explain
+- running the application container in Docker, with a real database running beside it
 - tests:
   - integrated and external (functional / end-to-end) tests with Docker Compose
   - test naming, they are closed to code, easy to find, but they're are omitted from the final app build
     to not bloat the image. tests foldeer close to testing
+  - tests are omitted from the Docker file with .dockerignore
+  - tests are located next to the file they're testing
   - TODO
 - static code checks:
   - ruff

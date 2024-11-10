@@ -1,10 +1,11 @@
+# ruff: noqa: INP001
 from logging.config import fileConfig
 
 from alembic import context
 import sqlalchemy
 import tenacity
 
-import sample_backend.config
+from sample_backend.core.config import SETTINGS
 import sample_backend.db
 
 # this is the Alembic Config object, which provides
@@ -27,7 +28,7 @@ def run_migrations_online() -> None:
 
     """
     sql_engine = sqlalchemy.create_engine(
-        sample_backend.config.AppConfig().postgres_url,
+        SETTINGS.postgres_url,
         poolclass=sqlalchemy.pool.NullPool,
     )
 
@@ -35,23 +36,19 @@ def run_migrations_online() -> None:
     _wait_for_postgres(sql_engine)
 
     with sql_engine.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
 
 
 @tenacity.retry(stop=tenacity.stop_after_delay(10), wait=tenacity.wait_fixed(0.2), reraise=True)
-def _wait_for_postgres(sql_engine):
-    """
-    """
+def _wait_for_postgres(sql_engine: sqlalchemy.Engine) -> None:
     with sql_engine.connect():
         pass
 
 
 if context.is_offline_mode():
-    raise NotImplemented("We don't have offline migrations")
+    raise NotImplementedError("We don't have offline migrations")
 else:
     run_migrations_online()

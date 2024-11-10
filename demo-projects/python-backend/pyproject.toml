@@ -135,8 +135,18 @@ force-sort-within-sections = true
 [tool.ruff.format]
 docstring-code-format = true
 
-[tool.bandit]
-skips = ["B101"]
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+markers = [
+    # TODO desc
+    "integrated",
+    # TODO desc
+    "external",
+    # Tests that wouldn't play well with others if we run tests in parallel with xdist.
+    # That may be because they're destructive to the data, containers, or some other shared resource.
+    "non_parallel",
+]
 
 [build-system]
 requires = ["poetry-core"]

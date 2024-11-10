@@ -1,4 +1,4 @@
-from sample_backend.config import AppConfig
+from sample_backend.core.config import AppConfig
 
 
 class AppTestsConfig(AppConfig):

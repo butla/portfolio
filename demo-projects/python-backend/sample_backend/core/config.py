@@ -1,8 +1,12 @@
+from typing import Final
+
 from pydantic_settings import BaseSettings
 
 
 class AppConfig(BaseSettings):
     """Settings for the application. Taken from environment variables."""
+
+    app_name: str = "Sample Python backend"
 
     postgres_host: str = "localhost"
     postgres_password: str = "postgres"
@@ -17,3 +21,6 @@ class AppConfig(BaseSettings):
             f"{self.postgres_host}:{self.postgres_port}/"
             f"{self.postgres_database}"
         )
+
+
+SETTINGS: Final = AppConfig()

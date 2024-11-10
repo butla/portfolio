@@ -1,3 +1,4 @@
+# ruff: noqa: D415, INP001
 """${message}
 
 Revision ID: ${up_revision}

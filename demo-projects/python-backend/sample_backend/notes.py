@@ -12,7 +12,8 @@ from collections.abc import Sequence
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from . import api_schemas
+from sample_backend.interface import schemas
+
 from .db import Note
 
 
@@ -24,7 +25,7 @@ class NotesRepository:
     def __init__(self, db_session_creator: async_sessionmaker[AsyncSession]) -> None:
         self._db_session_creator = db_session_creator
 
-    async def create(self, note_payload: api_schemas.NoteCreationPayload) -> int:
+    async def create(self, note_payload: schemas.NoteCreationPayload) -> int:
         """
         Create a new note.
 

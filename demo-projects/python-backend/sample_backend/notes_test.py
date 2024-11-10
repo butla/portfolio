@@ -1,8 +1,8 @@
 import pytest
 from sqlalchemy import select
 
-from sample_backend import api_schemas
 from sample_backend.db import Note, make_db_session_creator
+from sample_backend.interface import schemas
 from sample_backend.notes import NotesRepository
 
 
@@ -11,9 +11,9 @@ def notes_repo() -> NotesRepository:
     return NotesRepository(make_db_session_creator())
 
 
-@pytest.mark.asyncio
+@pytest.mark.integrated
 async def test_create_a_note(notes_repo: NotesRepository) -> None:
-    note_payload = api_schemas.NoteCreationPayload(contents="I'm a note, wee!")
+    note_payload = schemas.NoteCreationPayload(contents="I'm a note, wee!")
 
     id_ = await notes_repo.create(note_payload)
 
