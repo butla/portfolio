@@ -58,8 +58,8 @@ db_migration:
 	@echo ========================
 	poetry run alembic upgrade head
 
-# Usage make make_migration MESSAGE="<a message>"
-make_migration:
+# Usage make db_migration_create MESSAGE="<a message>"
+db_migration_create:
 	@echo ===============================
 	@echo Autogenerating DB migrations...
 	@echo ===============================
