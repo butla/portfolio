@@ -9,15 +9,29 @@ SRC_DIRECTORIES:=sample_backend tests
 # MAIN COMMANDS
 # ==============
 
+# First-time setup of the project.
 setup:
 	poetry install --no-root
+	pre-commit install
 
+# Run the project.
 run: _start_compose db_migration
 
+# Run the project, reloading it on code file changes.
 run_reload:
 	fd --exclude .git --no-ignore '\.py$$' | entr -c make run
 
+# Do all the quality checks.
 check: static_checks run test
+
+test:
+	@echo ================
+	@echo Running tests...
+	@echo ================
+	poetry run pytest -v tests
+
+test_reload:
+	fd --exclude .git --no-ignore '\.py$$' | entr -c make test
 
 format:
 	@echo ==================
@@ -74,15 +88,6 @@ _start_compose: _export_requirements
 _export_requirements:
 	poetry export --output=requirements.txt
 
-test:
-	@echo ================
-	@echo Running tests...
-	@echo ================
-	poetry run pytest -v tests
-
-test_reload:
-	fd --exclude .git --no-ignore '\.py$$' | entr -c make test
-
 static_checks: _check_types _check_format _check_linter _check_types
 
 _check_types:
@@ -102,4 +107,3 @@ _check_format:
 	@echo Checking formatting...
 	@echo ======================
 	poetry run ruff format --check $(SRC_DIRECTORIES)
-

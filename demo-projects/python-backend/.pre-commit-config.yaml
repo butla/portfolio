@@ -1,0 +1,29 @@
+---
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+default_stages:
+  - commit
+  - merge-commit
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.3
+    hooks:
+      - id: ruff
+        args:
+          - --select
+          - I
+          - --fix
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        # The arguments here need to duplicate the ones in pyproject.toml,
+        # as passing "--config=pyproject.toml" doesn't work,
+        # and mypy doesn't find pyproject.toml automatically, like the Ruff hook does.
+        args:
+          - --disallow-untyped-defs
+          - --ignore-missing-imports

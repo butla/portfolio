@@ -5,10 +5,24 @@ A sample back-end app used to illustrate testing and development techniques. TOD
 
 ## Setup
 
-Install these (TODO links):
-- poetry
-- Docker
-- for make commands that run tests on file changes and reload the app: fd and entr
+Install these tools:
+- [Docker](https://docs.docker.com/engine/install/)
+- [poetry](https://python-poetry.org/docs/#installation)
+- [precommit](https://pre-commit.com/#installation)
+
+Configure `poetry` so it'll create a .venv folder in the project's directory:
+```
+poetry config virtualenvs.create true
+poetry config virtualenvs.in-project true
+```
+
+Run `make setup run`.
+
+Now you have a development environment prepared, and you have the application running locally in Docker.
+
+For additional development commands, install:
+- [fd](https://github.com/sharkdp/fd?tab=readme-ov-file#installation)
+- [entr](https://eradman.com/entrproject/)
 
 ## Development operations
 
@@ -16,9 +30,17 @@ The commands are in the Makefile. Please review it.
 
 ## Demonstrated techniques
 
-TODO - fix the make command names
+TODO: split into categories, like architecture, SQL, testing, code formatting, local workflow
 
-- integrated and external (functional / end-to-end) tests with Docker Compose
+- application architecture inspired by clean code, TODO explain
+- tests:
+  - integrated and external (functional / end-to-end) tests with Docker Compose
+  - test naming, they are closed to code, easy to find, but they're are omitted from the final app build
+    to not bloat the image. tests foldeer close to testing
+  - TODO
+- static code checks:
+  - ruff
+- code formatting: ruff does it, can be run through the Makefile or with precommit
 - reloading app container on code changes (`make run_reloading`)
 - running tests on code changes (`make test_reloading`)
 - injectable locally bound container ports - accommodating self-hosted CI runners

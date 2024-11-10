@@ -138,12 +138,6 @@ docstring-code-format = true
 [tool.bandit]
 skips = ["B101"]
 
-# [tool.pytest.ini_options]
-# filterwarnings = [
-#     'ignore:distutils Version classes are deprecated:DeprecationWarning',
-#     'ignore:"@coroutine" decorator is deprecated since:DeprecationWarning',
-# ]
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
