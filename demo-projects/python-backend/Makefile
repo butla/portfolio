@@ -28,7 +28,8 @@ test:
 	@echo ================
 	@echo Running tests...
 	@echo ================
-	poetry run pytest -v
+	poetry run pytest -n auto -v -m "not non_parallel"
+	poetry run pytest -v -m "non_parallel"
 
 test_reload:
 	fd --exclude .git --no-ignore '\.py$$' | entr -c make test

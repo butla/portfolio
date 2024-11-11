@@ -50,3 +50,14 @@ def test_store_and_retrieve_note(app_url: str) -> None:
 
     get_all_result = httpx.get(f"{app_url}/notes/")
     assert next(note for note in get_all_result.json() if note["id"] == note_id)
+
+
+@pytest.mark.non_parallel
+@pytest.mark.external
+def test_app_image_handles_shutdown_signal() -> None:
+    assert True
+    # TODO implement
+    # Flow:
+    # - docker compose down api
+    # - see that it emits the "shutting down" log message, meaning that it handles SIGTERM correctly
+    # - docker compose up -d api

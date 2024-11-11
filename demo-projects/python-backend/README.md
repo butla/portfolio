@@ -35,7 +35,8 @@ TODO: split into categories, like architecture, SQL, testing, code formatting, l
 - application architecture inspired by clean code, TODO explain
 - running the application container in Docker, with a real database running beside it
 - tests:
-  - integrated and external (functional / end-to-end) tests with Docker Compose
+  - integrated and external (functional / end-to-end) tests with Docker Compose. Only unit tests can be run with
+    `pytest "not external and not integrated"`
   - test naming, they are closed to code, easy to find, but they're are omitted from the final app build
     to not bloat the image. tests foldeer close to testing
   - tests are omitted from the Docker file with .dockerignore

@@ -1,5 +1,6 @@
 from collections.abc import AsyncIterator, Sequence
 import contextlib
+import logging
 
 import fastapi
 
@@ -9,12 +10,19 @@ from sample_backend.db import Note
 
 from . import schemas
 
+logger = logging.getLogger(__name__)
+
 
 @contextlib.asynccontextmanager
 async def app_lifespan(app: fastapi.FastAPI) -> AsyncIterator[None]:
     del app  # not used
+    logging.basicConfig(level=logging.INFO)
+    logger.info("App starting...")
     services.init()
+
     yield
+    logger.info("App shutting down...")
+    # TODO close all services
 
 
 app = fastapi.FastAPI(
