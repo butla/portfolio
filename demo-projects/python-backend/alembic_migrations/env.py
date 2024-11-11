@@ -6,7 +6,7 @@ import sqlalchemy
 import tenacity
 
 from sample_backend.core.config import SETTINGS
-import sample_backend.db
+from sample_backend.entities import db_models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -17,7 +17,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-target_metadata = sample_backend.db.Base.metadata
+target_metadata = db_models.Base.metadata
 
 
 def run_migrations_online() -> None:

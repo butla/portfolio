@@ -29,7 +29,6 @@ httpx = "^0.27.2"
 pytest-xdist = "^3.6.1"
 
 [tool.mypy]
-ignore_missing_imports = true
 disallow_untyped_defs = true
 
 # Config documentation: https://docs.astral.sh/ruff/settings/
@@ -140,9 +139,9 @@ docstring-code-format = true
 asyncio_mode = "auto"
 
 markers = [
-    # TODO desc
+    # Tests that are integrated with an external resource, most likely a Docker container running in Docker Compose.
     "integrated",
-    # TODO desc
+    # Tests that communicate with the code running in the Docker container "from the outside", using external (HTTP) interfaces.
     "external",
     # Tests that wouldn't play well with others if we run tests in parallel with xdist.
     # That may be because they're destructive to the data, containers, or some other shared resource.

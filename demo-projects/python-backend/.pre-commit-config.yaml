@@ -11,19 +11,20 @@ repos:
     rev: v0.7.3
     hooks:
       - id: ruff
+        # Ruff finds pyproject.toml automatically, so there's no reason to pass it.
         args:
           - --select
           - I
           - --fix
       - id: ruff-format
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
+  # Mypy needs to understand the imports, so it needs to be run from the Poetry venv,
+  # and not an isolated one, which is the default with pre-commit.
+  - repo: local
     hooks:
       - id: mypy
-        # The arguments here need to duplicate the ones in pyproject.toml,
-        # as passing "--config=pyproject.toml" doesn't work,
-        # and mypy doesn't find pyproject.toml automatically, like the Ruff hook does.
-        args:
-          - --disallow-untyped-defs
-          - --ignore-missing-imports
+        name: mypy
+        # pre-commit will run from the repo root. We need to adjust for that.
+        entry: poetry -C demo-projects/python-backend run mypy
+        language: system
+        types: [python]

@@ -1,7 +1,7 @@
 Sample back-end app
 ===================
 
-A sample back-end app used to illustrate testing and development techniques. TODO
+A sample back-end app used to illustrate testing and development techniques.
 
 ## Setup
 
@@ -33,6 +33,8 @@ The commands are in the Makefile. Please review it.
 TODO: split into categories, like architecture, SQL, testing, code formatting, local workflow
 
 - application architecture inspired by clean code, TODO explain
+  - clean namespaces, e.g. connectors, entities make the code more obvious
+- technologies used: FastAPI, SQLAlchemy, PostgreSQL
 - running the application container in Docker, with a real database running beside it
 - tests:
   - integrated and external (functional / end-to-end) tests with Docker Compose. Only unit tests can be run with
@@ -56,8 +58,6 @@ TODO: split into categories, like architecture, SQL, testing, code formatting, l
 
 ## TODOs
 
-- pytest: stop trying to interpret TestsConfig as a test class
-  - https://docs.pytest.org/en/7.1.x/example/pythoncollection.html
 - show coverage measurements from docker in external tests
 - `make check` should also verify that requirements.txt is up to date with poetry dependencies
 - Add Github CI for the app that removes docker-compose.override.yml to fully check the app image

@@ -11,7 +11,7 @@ def test_client() -> TestClient:
     return TestClient(app)
 
 
-def test_hello_endpoint(test_client: TestClient) -> None:
+def test_healthcheck(test_client: TestClient) -> None:
     response = test_client.get("/")
     assert response.status_code == http.HTTPStatus.OK
-    assert response.json() == {"hello": "world"}
+    assert response.json()["status"] == "up"
