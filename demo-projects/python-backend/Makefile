@@ -4,6 +4,9 @@
 # So we're sure what shell we're using.
 SHELL:=/bin/bash
 
+# Directory to scan for tests. Can be overridden.
+TEST_DIR:=.
+
 SRC_DIRECTORIES:=sample_backend alembic_migrations
 
 # MAIN COMMANDS
@@ -28,11 +31,16 @@ test:
 	@echo ================
 	@echo Running tests...
 	@echo ================
-	poetry run pytest -n auto -v -m "not non_parallel"
-	poetry run pytest -v -m "non_parallel"
+	poetry run pytest -n auto -v -m "not non_parallel" $(TEST_DIR)
+	poetry run pytest -v -m "non_parallel" $(TEST_DIR)
+
+# This doesn't use xdist to parallelize the tests like the standard "test" target.
+# This allows using a debugger.
+test_debug:
+	poetry run pytest -v $(TEST_DIR)
 
 test_reload:
-	fd --exclude .git --no-ignore '\.py$$' | entr -c make test
+	fd --exclude .git --no-ignore '\.py$$' | entr -c make test_debug
 
 format:
 	@echo ==================
