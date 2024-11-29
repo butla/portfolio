@@ -32,6 +32,42 @@ The commands are in the Makefile. Please review it.
 
 TODO: split into categories, like architecture, SQL, testing, code formatting, local workflow
 
+Program architecture:
+
+TODO Link the project tree with descriptions
+
+- clean architecture (or my own flavor of it TODO: see tomato architecture, hexagon, port and adapter)
+  - services (my name for usecases, conveying the internal service architecture)
+    - simple / point-to-point - regular method calls between services
+    - pub/sub (fan-out)- add events and listeners to service classes. They can be organizing with a Networkx graph (DAG).
+      Each layer of the graph that's reachable from the current node can be taken automatically with networkx
+      (TODO see my work with dependency resolution in Cloud Foundry in Intel (late) Trusted Analytic's Platform's Apployer
+      (I named it - app deployer - well, it's a descriptive name ¯\_(ツ)_/¯)
+    - producer / consumer - like above, but routing each message/event to only one receiver, with retries.
+      Exactly once is never really possible.
+    - streaming - with composable async generators and iterators:
+      - also comes in point-to-point, pub/sub, producer / consumer
+  - Interfaces and schemas
+
+Development workflow:
+- local tests with Docker Compose
+- mounting the code with Docker overrides
+- local dev and CI parity (TODO):
+  - getting rid of the overrides in CI, so that the image without the mount is tested.
+
+Testing:
+- tests close to the tested code. Test code is omitted from container images.
+- pytest mark to distinguish different kinds of tests (TODO link my post about test classification):
+  - unit tests don't have anything special - less typing
+  - "integrated tests" get `@pytest.mark.integrated`
+    - they require resources from Docker Compose
+    - "integrated" as in integrated with Docker, with a database, etc. That can be integrated with any external system from our application, that's still available locally
+  - "external tests"
+    - tests that use the external interface of our application -in this case, HTTP endpoint on a running app Docker container)
+
+- TODO testing services in isolation
+  - pytest-mock for mocking out the interface and connector level dependencies, using the auto spec
+
 - application architecture inspired by clean code, TODO explain
   - clean namespaces, e.g. connectors, entities make the code more obvious
 - technologies used: FastAPI, SQLAlchemy, PostgreSQL
