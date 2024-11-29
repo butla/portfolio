@@ -6,12 +6,6 @@ My best work so far is, sadly, closed-source, and not owned by me.
 
 For code samples, see `demo-projects` directory.
 
-**ATTENTION** 2024-11-01: I'll be making updates to the sample code to make it show more of what I can do,
-as I'm looking for work.
-The projects listed below might also be getting some attention.
-some of the projects below should be getting updates in the next two weeks,
-
-
 Links
 -----
 
