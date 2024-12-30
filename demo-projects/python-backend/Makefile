@@ -68,10 +68,10 @@ show_api_documentation:
 shell:
 	poetry run ptpython
 
-db_shell:
+shell_db:
 	PGPASSWORD=postgres poetry run pgcli -h localhost -p 5432 -U postgres -d postgres
 
-docker_app_shell:
+shell_docker_app:
 	docker compose exec api sh
 
 # Fix everything that Ruff proposes to fix.
