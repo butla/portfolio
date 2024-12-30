@@ -1,6 +1,10 @@
 import datetime
+from typing import Type, TypeVar
 
 import pydantic
+
+from sample_backend.entities.db_models import Note
+from sample_backend.interface.schemas.common import PaginationParams
 
 
 class NoteCreationPayload(pydantic.BaseModel):
@@ -12,5 +16,19 @@ class NoteResponsePayload(pydantic.BaseModel):
     model_config = pydantic.ConfigDict(from_attributes=True)
 
     id: int
-    creation_date: datetime.datetime
+    creation_date: pydantic.AwareDatetime
     contents: str
+
+
+# TODO finish this up thework out the details and fini
+T = TypeVar("T", bound="NotesPage")
+
+
+class NotesPage(PaginationParams):
+    notes: list[NoteResponsePayload]
+
+    @classmethod
+    # TODO needs pagination params as input
+    def from_notes(cls: type[T], notes: list[Note]) -> T:  # type: ignore[empty-body]
+        # return cls(notes=notes, ) for note]
+        pass

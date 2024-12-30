@@ -6,7 +6,7 @@ But pragmatically, they function as entities very well. Especially with FastAPI.
 
 import datetime
 
-from sqlalchemy import func
+from sqlalchemy import DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.sql import expression
 
@@ -22,7 +22,9 @@ class Note(Base):
 
     # TODO make this a GUID
     id: Mapped[int] = mapped_column(primary_key=True)
-    # TODO should be timezone-aware
-    creation_date: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
+    creation_date: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
     contents: Mapped[str]
+    category: Mapped[str] = mapped_column(server_default="")
     is_deleted: Mapped[bool] = mapped_column(server_default=expression.false())
