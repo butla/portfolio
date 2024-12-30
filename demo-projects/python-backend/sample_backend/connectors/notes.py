@@ -10,7 +10,7 @@ Also, it'll set the stage for using a test double of the NotesRepository in unit
 from collections.abc import Sequence
 import dataclasses
 
-from sqlalchemy import select, update
+from sqlalchemy import Select, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from sample_backend.entities.db_models import Note
@@ -21,14 +21,14 @@ from sample_backend.interface import schemas
 class NotesRepository:
     """Stores and returns notes."""
 
-    BASE_QUERY = select(Note).where(Note.is_deleted == False)  # noqa: E712
+    BASE_QUERY = select(Note).where(Note.is_deleted == False).order_by(Note.creation_date.desc())  # noqa: E712
 
     def __init__(self, db_session: AsyncSession) -> None:
         self._db_session = db_session
 
     async def create(self, note_payload: schemas.NoteCreationPayload) -> Note:
         """Create a new note."""
-        note = Note(contents=note_payload.contents)
+        note = Note(contents=note_payload.contents, category=note_payload.category)
         self._db_session.add(note)
         await self._db_session.flush()
         return note
@@ -47,8 +47,18 @@ class NotesRepository:
         result = await self._db_session.execute(query)
         return result.scalar_one()
 
-    async def get_all(self) -> Sequence[Note]:
-        """Get all notes."""
-        query = self.BASE_QUERY
+    async def get_all(
+        self, pagination: schemas.PaginationParams, filters: schemas.NotesFilters
+    ) -> Sequence[Note]:
+        """Get all notes with paging in the descending order of the creation time."""
+        query = self._filter(
+            query=self.BASE_QUERY.offset(pagination.offset).limit(pagination.limit),
+            filters=filters,
+        )
         result = await self._db_session.execute(query)
         return result.scalars().all()
+
+    def _filter(self, query: Select, filters: schemas.NotesFilters) -> Select:
+        if filters.category is not None:
+            query = query.where(Note.category == filters.category)
+        return query

@@ -1,9 +1,9 @@
 # ruff: noqa: D415, INP001
-"""Initial migration
+"""initial
 
-Revision ID: 176484337cb3
+Revision ID: 5e8b5585c484
 Revises:
-Create Date: 2023-03-28 13:15:10.907672
+Create Date: 2024-12-30 10:18:07.012384
 
 """
 
@@ -11,7 +11,7 @@ from alembic import op
 import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
-revision = "176484337cb3"
+revision = "5e8b5585c484"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,8 +22,11 @@ def upgrade() -> None:
     op.create_table(
         "notes",
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("creation_date", sa.DateTime(), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "creation_date", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False
+        ),
         sa.Column("contents", sa.String(), nullable=False),
+        sa.Column("category", sa.String(), server_default="", nullable=False),
         sa.Column("is_deleted", sa.Boolean(), server_default=sa.text("false"), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )

@@ -25,6 +25,8 @@ class NotesService:
         """Get a single note."""
         return await self.repository.get(note_id)
 
-    async def get_all(self) -> Sequence[db_models.Note]:
+    async def get_all(
+        self, pagination: schemas.PaginationParams, filters: schemas.NotesFilters
+    ) -> Sequence[db_models.Note]:
         """Get all notes."""
-        return await self.repository.get_all()
+        return await self.repository.get_all(pagination=pagination, filters=filters)

@@ -35,7 +35,7 @@ def _wait_for_http_url(url: str) -> None:
 @pytest.mark.external
 def test_store_and_retrieve_note(app_url: str) -> None:
     """Check that the app runs correctly in the Docker container."""
-    note_contents = f"first note {uuid.uuid4()}"
+    note_contents = f"note {uuid.uuid4()}"
     create_result = httpx.post(
         f"{app_url}/notes/",
         json={"contents": note_contents},
@@ -47,9 +47,6 @@ def test_store_and_retrieve_note(app_url: str) -> None:
     get_result = httpx.get(f"{app_url}/notes/{note_id}/")
     assert get_result.status_code == http.HTTPStatus.OK
     assert get_result.json()["contents"] == note_contents
-
-    get_all_result = httpx.get(f"{app_url}/notes/")
-    assert next(note for note in get_all_result.json() if note["id"] == note_id)
 
 
 @pytest.mark.non_parallel

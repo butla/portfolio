@@ -1,5 +1,4 @@
-import datetime
-from typing import Type, TypeVar
+from typing import TypeVar
 
 import pydantic
 
@@ -9,6 +8,7 @@ from sample_backend.interface.schemas.common import PaginationParams
 
 class NoteCreationPayload(pydantic.BaseModel):
     contents: str
+    category: str = ""
 
 
 class NoteResponsePayload(pydantic.BaseModel):
@@ -18,9 +18,14 @@ class NoteResponsePayload(pydantic.BaseModel):
     id: int
     creation_date: pydantic.AwareDatetime
     contents: str
+    category: str
 
 
-# TODO finish this up thework out the details and fini
+class NotesFilters(pydantic.BaseModel):
+    category: str | None = None
+
+
+# TODO finish this up. Start returning pages when using paging.
 T = TypeVar("T", bound="NotesPage")
 
 
